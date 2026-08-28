@@ -642,6 +642,7 @@ export default class Controls extends EventEmitter
         // Reveal
         this.touch.reveal = () =>
         {
+            document.body.classList.add('touch-driving-active')
             this.touch.joystick.$element.style.opacity = 1
             this.touch.backward.$element.style.opacity = 1
             this.touch.brake.$element.style.opacity = 1

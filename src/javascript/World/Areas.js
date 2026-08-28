@@ -54,10 +54,40 @@ export default class Areas
         // Touch
         this.renderer.domElement.addEventListener('touchstart', (_event) =>
         {
-            this.mouse.coordinates.x = (_event.changedTouches[0].clientX / window.innerWidth) * 2 - 1
-            this.mouse.coordinates.y = - (_event.changedTouches[0].clientY / window.innerHeight) * 2 + 1
+            if(_event.changedTouches && _event.changedTouches[0])
+            {
+                this.mouse.coordinates.x = (_event.changedTouches[0].clientX / window.innerWidth) * 2 - 1
+                this.mouse.coordinates.y = - (_event.changedTouches[0].clientY / window.innerHeight) * 2 + 1
+                this.mouse.needsUpdate = true
+            }
+        }, { passive: true })
 
-            this.mouse.needsUpdate = true
+        this.renderer.domElement.addEventListener('touchend', (_event) =>
+        {
+            if(_event.changedTouches && _event.changedTouches[0])
+            {
+                this.mouse.coordinates.x = (_event.changedTouches[0].clientX / window.innerWidth) * 2 - 1
+                this.mouse.coordinates.y = - (_event.changedTouches[0].clientY / window.innerHeight) * 2 + 1
+
+                this.mouse.raycaster.setFromCamera(this.mouse.coordinates, this.camera.instance)
+                const objects = this.items.map((_area) => _area.mouseMesh)
+                const intersects = this.mouse.raycaster.intersectObjects(objects)
+
+                if(intersects.length)
+                {
+                    const area = this.items.find((_area) => _area.mouseMesh === intersects[0].object)
+                    if(area)
+                    {
+                        area.interact(false)
+                        return
+                    }
+                }
+            }
+
+            if(this.mouse.currentArea)
+            {
+                this.mouse.currentArea.interact(false)
+            }
         })
 
         // Time tick event
