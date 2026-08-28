@@ -26,6 +26,7 @@ import Controls from './Controls.js'
 import Sounds from './Sounds.js'
 import gsap from 'gsap'
 import EasterEggs from './EasterEggs.js'
+import Autopilot from './Autopilot.js'
 
 export default class World
 {
@@ -98,6 +99,7 @@ export default class World
         this.setWalls()
         this.setSections()
         this.setEasterEggs()
+        this.setAutopilot()
     }
 
     setReveal()
@@ -285,6 +287,12 @@ export default class World
                     hud.classList.add('is-hidden')
                 }
 
+                const startIntro = document.getElementById('startScreenIntro')
+                if(startIntro)
+                {
+                    startIntro.classList.add('is-hidden')
+                }
+
                 this.start()
 
                 window.requestAnimationFrame(() =>
@@ -312,6 +320,12 @@ export default class World
             gsap.to(this.startingScreen.area.floorBorder.material.uniforms.uProgress, { value: 0, duration: 0.3, delay: 0.4 })
 
             gsap.to(this.startingScreen.startLabel.material, { opacity: 0, duration: 0.3, delay: 0.4 })
+
+            const startIntro = document.getElementById('startScreenIntro')
+            if(startIntro)
+            {
+                startIntro.classList.add('is-hidden')
+            }
 
             this.start()
 
@@ -647,6 +661,46 @@ export default class World
             physics: this.physics
         })
         this.container.add(this.easterEggs.container)
+    }
+
+    setAutopilot()
+    {
+        this.autopilot = new Autopilot({
+            time: this.time,
+            car: this.car,
+            physics: this.physics,
+            camera: this.camera,
+            sounds: this.sounds,
+            controls: this.controls,
+            world: this
+        })
+    }
+
+    ensureStarted()
+    {
+        if(!this.autopilot)
+        {
+            if(this.startingScreen && this.startingScreen.area)
+            {
+                this.startingScreen.area.deactivate()
+                if(this.startingScreen.loadingLabel && this.startingScreen.loadingLabel.mesh) this.startingScreen.loadingLabel.mesh.visible = false
+                if(this.startingScreen.startLabel && this.startingScreen.startLabel.mesh) this.startingScreen.startLabel.mesh.visible = false
+                if(this.startingScreen.area.container) this.startingScreen.area.container.visible = false
+            }
+
+            const startIntro = document.getElementById('startScreenIntro')
+            if(startIntro)
+            {
+                startIntro.classList.add('is-hidden')
+            }
+
+            this.start()
+            if(this.reveal)
+            {
+                this.reveal.go(true)
+            }
+        }
+        return this.autopilot
     }
 
     getReturnState()

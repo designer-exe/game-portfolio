@@ -177,17 +177,26 @@ export default class Project
             }
 
             // Interactive drive button pill
+            const pillX = 120
+            const pillY = 590
+            const pillWidth = 580
+            const pillHeight = 88
+            const pillCenterX = pillX + pillWidth * 0.5
+            const pillCenterY = pillY + pillHeight * 0.5
+
             ctx.fillStyle = 'rgba(185, 130, 90, 0.22)'
             ctx.strokeStyle = '#B9825A'
             ctx.lineWidth = 4
             ctx.beginPath()
-            ctx.roundRect(120, 620, 580, 90, 45)
+            ctx.roundRect(pillX, pillY, pillWidth, pillHeight, pillHeight * 0.5)
             ctx.fill()
             ctx.stroke()
 
             ctx.fillStyle = '#F4E8D8'
-            ctx.font = '800 38px Manrope, sans-serif'
-            ctx.fillText('DRIVE TO OPEN CASE STUDY ↗', 160, 680)
+            ctx.font = '800 36px Manrope, sans-serif'
+            ctx.textAlign = 'center'
+            ctx.textBaseline = 'middle'
+            ctx.fillText('DRIVE TO OPEN CASE STUDY →', pillCenterX, pillCenterY)
 
             this.floor.texture = new THREE.CanvasTexture(canvas)
             this.floor.texture.magFilter = THREE.LinearFilter

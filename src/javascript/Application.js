@@ -13,6 +13,7 @@ import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import BlurPass from './Passes/Blur.js'
 import GlowsPass from './Passes/Glows.js'
+import ChatbotUI from './AI/ChatbotUI.js'
 
 export default class Application
 {
@@ -36,6 +37,9 @@ export default class Application
         this.setPasses()
         this.setWorld()
         this.setTitle()
+        this.setChatbot()
+
+        window.application = this
     }
 
     /**
@@ -237,6 +241,7 @@ export default class Application
             renderer: this.renderer,
             passes: this.passes
         })
+        this.world.application = this
         this.scene.add(this.world.container)
     }
 
@@ -247,21 +252,29 @@ export default class Application
     {
         document.title = 'Animesh'
 
-        // Auto hide HUD instructions on driving
+        // Auto hide HUD instructions & start intro on driving
         const hud = document.getElementById('instructionsHud')
-        if(hud)
+        const startIntro = document.getElementById('startScreenIntro')
+        if(hud || startIntro)
         {
             let drivingTimeout = null
             this.time.on('tick', () =>
             {
-                if(this.world.physics && Math.abs(this.world.physics.car.speed) > 0.05 && !hud.classList.contains('is-hidden'))
+                if(this.world.physics && Math.abs(this.world.physics.car.speed) > 0.05)
                 {
-                    if(!drivingTimeout)
+                    if(startIntro && !startIntro.classList.contains('is-hidden'))
                     {
-                        drivingTimeout = window.setTimeout(() =>
+                        startIntro.classList.add('is-hidden')
+                    }
+                    if(hud && !hud.classList.contains('is-hidden'))
+                    {
+                        if(!drivingTimeout)
                         {
-                            hud.classList.add('is-hidden')
-                        }, 5000)
+                            drivingTimeout = window.setTimeout(() =>
+                            {
+                                hud.classList.add('is-hidden')
+                            }, 5000)
+                        }
                     }
                 }
             })
@@ -278,6 +291,14 @@ export default class Application
             time: this.time,
             world: this.world
         })
+    }
+
+    /**
+     * Set AI Chatbot Assistant
+     */
+    setChatbot()
+    {
+        this.chatbot = new ChatbotUI()
     }
 
     /**

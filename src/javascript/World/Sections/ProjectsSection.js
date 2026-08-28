@@ -54,11 +54,28 @@ export default class ProjectsSection {
     setMeshes() {
         this.meshes = {}
 
-        // this.meshes.boardStructure = this.objects.getConvertedMesh(this.resources.items.projectsBoardStructure.scene.children, { floorShadowTexture: this.resources.items.projectsBoardStructureFloorShadowTexture })
-        this.resources.items.areaOpenTexture.magFilter = THREE.NearestFilter
-        this.resources.items.areaOpenTexture.minFilter = THREE.LinearFilter
+        // Area label texture: "OPEN ↗" cleanly centered as one group
+        const canvas = document.createElement('canvas')
+        canvas.width = 512
+        canvas.height = 128
+        const ctx = canvas.getContext('2d')
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.fillStyle = '#FFFFFF'
+        ctx.font = '900 58px Manrope, sans-serif'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillText('OPEN ↗', canvas.width * 0.5, canvas.height * 0.5)
+
+        const areaOpenTexture = new THREE.CanvasTexture(canvas)
+        areaOpenTexture.magFilter = THREE.LinearFilter
+        areaOpenTexture.minFilter = THREE.LinearMipmapLinearFilter
+
         this.meshes.boardPlane = this.resources.items.projectsBoardPlane.scene.children[0]
-        this.meshes.areaLabel = new THREE.Mesh(new THREE.PlaneGeometry(2, 0.5), new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, color: 0xffffff, alphaMap: this.resources.items.areaOpenTexture }))
+        this.meshes.areaLabel = new THREE.Mesh(
+            new THREE.PlaneGeometry(2.4, 0.6),
+            new THREE.MeshBasicMaterial({ transparent: true, depthWrite: false, map: areaOpenTexture })
+        )
         this.meshes.areaLabel.matrixAutoUpdate = false
     }
 
@@ -84,11 +101,11 @@ export default class ProjectsSection {
                 {
                     href: 'https://www.behance.net/gallery/246296419/Adcoop-(Food-Retail)',
                     x: - 4.8,
-                    y: - 3,
+                    y: - 2.6,
                     halfExtents:
                     {
-                        x: 3.2,
-                        y: 1.5
+                        x: 2.8,
+                        y: 0.95
                     }
                 },
                 distinctions: []
@@ -113,11 +130,11 @@ export default class ProjectsSection {
                 {
                     href: 'https://www.behance.net/gallery/246523763/Kalam-Game',
                     x: - 4.8,
-                    y: - 3,
+                    y: - 2.6,
                     halfExtents:
                     {
-                        x: 3.2,
-                        y: 1.5
+                        x: 2.8,
+                        y: 0.95
                     }
                 },
                 distinctions: []
@@ -141,11 +158,11 @@ export default class ProjectsSection {
                 {
                     href: 'https://www.behance.net/gallery/246524943/Serh-Group-Website',
                     x: - 4.8,
-                    y: - 3,
+                    y: - 2.6,
                     halfExtents:
                     {
-                        x: 3.2,
-                        y: 1.5
+                        x: 2.8,
+                        y: 0.95
                     }
                 },
                 distinctions: []
@@ -167,11 +184,11 @@ export default class ProjectsSection {
                 {
                     href: 'https://designeranimesh.framer.ai/projects/comming-soon',
                     x: - 4.8,
-                    y: - 3,
+                    y: - 2.6,
                     halfExtents:
                     {
-                        x: 3.2,
-                        y: 1.5
+                        x: 2.8,
+                        y: 0.95
                     }
                 },
                 distinctions: []
