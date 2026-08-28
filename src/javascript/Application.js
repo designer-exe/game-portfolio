@@ -14,6 +14,7 @@ import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js'
 import BlurPass from './Passes/Blur.js'
 import GlowsPass from './Passes/Glows.js'
 import ChatbotUI from './AI/ChatbotUI.js'
+import MusicPlayerUI from './Music/MusicPlayerUI.js'
 
 export default class Application
 {
@@ -38,6 +39,7 @@ export default class Application
         this.setWorld()
         this.setTitle()
         this.setChatbot()
+        this.setMusicPlayer()
 
         window.application = this
     }
@@ -299,6 +301,14 @@ export default class Application
     setChatbot()
     {
         this.chatbot = new ChatbotUI()
+    }
+
+    /**
+     * Set Music Player
+     */
+    setMusicPlayer()
+    {
+        this.musicPlayer = new MusicPlayerUI()
     }
 
     /**

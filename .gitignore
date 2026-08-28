@@ -144,3 +144,9 @@ tags
 .history
 
 # End of https://www.gitignore.io/api/vim,node,macos,visualstudiocode
+
+# Scratch and test files
+scratch/
+
+# Local snapshots/backups
+backups/

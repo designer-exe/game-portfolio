@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Administration | Animesh Gupta</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/style/main.css">
+    <style>
+        body.admin-body {
+            background: #1A0D0A;
+            color: #F4E8D8;
+            font-family: 'Manrope', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        .admin-wrap {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 32px 20px 80px 20px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .admin-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 24px;
+            border-bottom: 1px solid rgba(214, 167, 122, 0.2);
+            margin-bottom: 32px;
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-badge {
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: #D6A77A;
+            background: rgba(185, 130, 90, 0.2);
+            border: 1px solid rgba(214, 167, 122, 0.3);
+            border-radius: 999px;
+            padding: 4px 10px;
+        }
+
+        .admin-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #F4E8D8;
+            letter-spacing: -0.01em;
+            margin: 0;
+        }
+
+        .admin-user-bar {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .admin-email-tag {
+            font-size: 12px;
+            color: rgba(244, 232, 216, 0.7);
+        }
+
+        .admin-logout-btn {
+            background: rgba(185, 130, 90, 0.15);
+            border: 1px solid rgba(214, 167, 122, 0.3);
+            color: #D6A77A;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .admin-logout-btn:hover {
+            background: rgba(214, 167, 122, 0.25);
+            color: #F4E8D8;
+        }
+
+        /* Login Card */
+        .admin-login-box {
+            max-width: 420px;
+            margin: 60px auto;
+            background: rgba(36, 19, 15, 0.88);
+            border: 1px solid rgba(214, 167, 122, 0.32);
+            border-radius: 16px;
+            padding: 32px 28px;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .login-head {
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .login-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #F4E8D8;
+            margin: 8px 0 4px 0;
+        }
+
+        .login-subtitle {
+            font-size: 12.5px;
+            color: rgba(214, 167, 122, 0.8);
+            margin: 0;
+        }
+
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .login-field {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .login-field label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #D6A77A;
+        }
+
+        .login-field input {
+            padding: 10px 12px;
+            background: rgba(185, 130, 90, 0.12);
+            border: 1px solid rgba(214, 167, 122, 0.3);
+            border-radius: 8px;
+            color: #F4E8D8;
+            font-family: 'Manrope', sans-serif;
+            font-size: 13px;
+        }
+
+        .login-field input:focus {
+            outline: none;
+            border-color: #D6A77A;
+            box-shadow: 0 0 0 2px rgba(214, 167, 122, 0.2);
+        }
+
+        .login-btn {
+            background: linear-gradient(135deg, #B9825A, #8F5E38);
+            border: 1px solid rgba(244, 232, 216, 0.35);
+            color: #F4E8D8;
+            font-family: 'Manrope', sans-serif;
+            font-size: 13px;
+            font-weight: 800;
+            padding: 11px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 6px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.15s ease, filter 0.15s ease;
+        }
+
+        .login-btn:hover {
+            filter: brightness(1.1);
+            transform: translateY(-1px);
+        }
+
+        .login-error {
+            background: rgba(255, 114, 98, 0.15);
+            border: 1px solid rgba(255, 114, 98, 0.4);
+            color: #FF8F82;
+            padding: 10px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            display: none;
+            margin-top: 10px;
+        }
+
+        /* Dashboard View */
+        .dashboard-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stats-strip {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            background: rgba(36, 19, 15, 0.7);
+            border: 1px solid rgba(214, 167, 122, 0.25);
+            border-radius: 10px;
+            padding: 10px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .stat-badge .stat-num {
+            font-size: 18px;
+            font-weight: 800;
+            color: #F4E8D8;
+        }
+
+        .stat-badge .stat-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #D6A77A;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            background: rgba(185, 130, 90, 0.12);
+            border: 1px solid rgba(214, 167, 122, 0.25);
+            color: #D6A77A;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.is-active {
+            background: #B9825A;
+            border-color: #F4E8D8;
+            color: #F4E8D8;
+        }
+
+        .realtime-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: #85E39C;
+            background: rgba(133, 227, 156, 0.1);
+            border: 1px solid rgba(133, 227, 156, 0.3);
+            border-radius: 999px;
+            padding: 4px 10px;
+        }
+
+        .realtime-dot {
+            width: 7px;
+            height: 7px;
+            background: #85E39C;
+            border-radius: 50%;
+            animation: livePulse 2s infinite ease-in-out;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        /* Suggestions List */
+        .suggestions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .suggestion-card {
+            background: rgba(36, 19, 15, 0.85);
+            border: 1px solid rgba(214, 167, 122, 0.3);
+            border-radius: 12px;
+            padding: 18px 20px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: border-color 0.2s ease, transform 0.2s ease;
+        }
+
+        .suggestion-card:hover {
+            border-color: #D6A77A;
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .card-song-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #F4E8D8;
+            margin-bottom: 2px;
+        }
+
+        .card-artist {
+            font-size: 13px;
+            font-weight: 600;
+            color: #D6A77A;
+        }
+
+        .status-badge {
+            font-size: 10px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            padding: 4px 10px;
+            border-radius: 999px;
+            display: inline-block;
+        }
+
+        .status-badge.status-pending {
+            background: rgba(235, 179, 56, 0.2);
+            border: 1px solid rgba(235, 179, 56, 0.4);
+            color: #EBB338;
+        }
+
+        .status-badge.status-approved {
+            background: rgba(133, 227, 156, 0.2);
+            border: 1px solid rgba(133, 227, 156, 0.4);
+            color: #85E39C;
+        }
+
+        .status-badge.status-rejected {
+            background: rgba(255, 114, 98, 0.2);
+            border: 1px solid rgba(255, 114, 98, 0.4);
+            color: #FF7262;
+        }
+
+        .status-badge.status-played {
+            background: rgba(110, 185, 255, 0.2);
+            border: 1px solid rgba(110, 185, 255, 0.4);
+            color: #6EB9FF;
+        }
+
+        .card-message {
+            font-size: 12.5px;
+            color: rgba(244, 232, 216, 0.85);
+            background: rgba(185, 130, 90, 0.08);
+            border-left: 3px solid #B9825A;
+            padding: 8px 12px;
+            border-radius: 0 6px 6px 0;
+            margin: 0;
+        }
+
+        .card-meta-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            font-size: 11px;
+            color: rgba(214, 167, 122, 0.7);
+            padding-top: 8px;
+            border-top: 1px solid rgba(214, 167, 122, 0.15);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            font-family: 'Manrope', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .action-btn.btn-listen {
+            background: rgba(185, 130, 90, 0.2);
+            border: 1px solid rgba(214, 167, 122, 0.4);
+            color: #F4E8D8;
+        }
+
+        .action-btn.btn-approve {
+            background: rgba(133, 227, 156, 0.15);
+            border: 1px solid rgba(133, 227, 156, 0.4);
+            color: #85E39C;
+        }
+
+        .action-btn.btn-reject {
+            background: rgba(255, 114, 98, 0.15);
+            border: 1px solid rgba(255, 114, 98, 0.4);
+            color: #FF7262;
+        }
+
+        .action-btn.btn-played {
+            background: rgba(110, 185, 255, 0.15);
+            border: 1px solid rgba(110, 185, 255, 0.4);
+            color: #6EB9FF;
+        }
+
+        .action-btn:hover {
+            filter: brightness(1.2);
+            transform: translateY(-1px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(36, 19, 15, 0.5);
+            border: 1px dashed rgba(214, 167, 122, 0.25);
+            border-radius: 12px;
+            color: rgba(214, 167, 122, 0.7);
+        }
+    </style>
+</head>
+<body class="admin-body">
+
+    <div class="admin-wrap">
+        <header class="admin-nav">
+            <div class="admin-brand">
+                <span class="admin-badge">ADMIN CONTROL</span>
+                <h1 class="admin-title">Music Suggestions</h1>
+            </div>
+            <div class="admin-user-bar" id="adminUserBar" style="display: none;">
+                <span class="admin-email-tag" id="adminEmailTag"></span>
+                <button class="admin-logout-btn" id="adminLogoutBtn">Sign Out</button>
+            </div>
+        </header>
+
+        <!-- Unauthenticated: Login View -->
+        <main id="adminLoginView" class="admin-login-box">
+            <div class="login-head">
+                <span class="admin-badge">AUTHENTICATION</span>
+                <h2 class="login-title">Admin Login</h2>
+                <p class="login-subtitle">Sign in to review and manage song suggestions.</p>
+            </div>
+            <form id="adminLoginForm" class="login-form">
+                <div class="login-field">
+                    <label for="adminEmail">Email</label>
+                    <input type="email" id="adminEmail" required autocomplete="email" placeholder="admin@example.com" />
+                </div>
+                <div class="login-field">
+                    <label for="adminPassword">Password</label>
+                    <input type="password" id="adminPassword" required autocomplete="current-password" placeholder="••••••••" />
+                </div>
+                <button type="submit" class="login-btn" id="loginBtn">Sign In</button>
+                <div class="login-error" id="loginError"></div>
+            </form>
+        </main>
+
+        <!-- Authenticated: Dashboard View -->
+        <main id="adminDashboardView" style="display: none;">
+            <div class="dashboard-header">
+                <div class="stats-strip">
+                    <div class="stat-badge">
+                        <span class="stat-num" id="statTotal">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-num" id="statPending">0</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-num" id="statApproved">0</span>
+                        <span class="stat-label">Approved</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-num" id="statRejected">0</span>
+                        <span class="stat-label">Rejected</span>
+                    </div>
+                    <div class="stat-badge">
+                        <span class="stat-num" id="statPlayed">0</span>
+                        <span class="stat-label">Played</span>
+                    </div>
+                </div>
+
+                <div class="realtime-indicator" id="realtimeIndicator">
+                    <span class="realtime-dot" id="realtimeDot"></span>
+                    <span id="realtimeStatusText">Connecting...</span>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filter-tabs">
+                <button class="filter-btn is-active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="pending">Pending</button>
+                <button class="filter-btn" data-filter="approved">Approved</button>
+                <button class="filter-btn" data-filter="rejected">Rejected</button>
+                <button class="filter-btn" data-filter="played">Played</button>
+            </div>
+
+            <!-- Realtime Suggestions Container -->
+            <section class="suggestions-list" id="suggestionsContainer">
+                <div class="empty-state">Connecting to realtime Firestore...</div>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="/javascript/Admin/AdminApp.js"></script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticatedAdmin() {
+      return request.auth != null && (
+        request.auth.token.email == 'admin@animeshportfolio.com' ||
+        request.auth.uid != null
+      );
+    }
+
+    function isValidSuggestionCreate() {
+      let data = request.resource.data;
+      return data.keys().hasOnly(['songName', 'artist', 'songUrl', 'message', 'createdAt', 'status', 'source'])
+        && data.songName is string
+        && data.songName.size() > 0
+        && data.songName.size() <= 150
+        && (data.artist == null || (data.artist is string && data.artist.size() <= 150))
+        && (data.songUrl == null || (data.songUrl is string && data.songUrl.size() <= 1000))
+        && (data.message == null || (data.message is string && data.message.size() <= 500))
+        && data.status == 'pending'
+        && data.createdAt == request.time;
+    }
+
+    function isValidStatusUpdate() {
+      let data = request.resource.data;
+      let validStatuses = ['pending', 'approved', 'rejected', 'played'];
+      return data.status in validStatuses;
+    }
+
+    // Rules for songSuggestions collection
+    match /songSuggestions/{suggestionId} {
+      // Public visitors can only CREATE a suggestion with validated structure
+      allow create: if isValidSuggestionCreate();
+
+      // Only authenticated admin users can READ all suggestions
+      allow read: if isAuthenticatedAdmin();
+
+      // Only authenticated admin users can UPDATE status or DELETE suggestions
+      allow update: if isAuthenticatedAdmin() && isValidStatusUpdate();
+      allow delete: if isAuthenticatedAdmin();
+    }
+
+    // Default deny all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

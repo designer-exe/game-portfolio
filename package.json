@@ -13,6 +13,7 @@
   "dependencies": {
     "cannon": "^0.6.2",
     "dat.gui": "^0.7.9",
+    "firebase": "^12.18.0",
     "gsap": "^3.12.5",
     "howler": "^2.2.4",
     "three": "^0.164.1",

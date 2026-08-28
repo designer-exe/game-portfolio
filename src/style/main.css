@@ -1301,3 +1301,975 @@ html
         max-height: 520px;
     }
 }
+
+/* ==========================================================================
+   MUSIC PLAYER & SONG SUGGESTION SYSTEM
+   ========================================================================== */
+
+.music-player-hud
+{
+    position: fixed;
+    bottom: 24px;
+    right: 240px;
+    z-index: 125;
+    font-family: 'Manrope', sans-serif;
+    user-select: none;
+    pointer-events: auto;
+}
+
+/* Collapsed Mini Pill */
+.music-pill
+{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    height: 48px;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, rgba(42, 22, 17, 0.95), rgba(30, 15, 11, 0.97));
+    border: 1.5px solid rgba(214, 167, 122, 0.4);
+    border-radius: 999px;
+    padding: 0 12px 0 7px;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 16px rgba(185, 130, 90, 0.2);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+}
+
+.music-pill:hover
+{
+    border-color: rgba(214, 167, 122, 0.65);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6), 0 0 20px rgba(214, 167, 122, 0.25);
+}
+
+.music-pill.is-hidden
+{
+    display: none !important;
+}
+
+.music-pill.is-active
+{
+    border-color: rgba(214, 167, 122, 0.7);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.55), 0 0 20px rgba(214, 167, 122, 0.35);
+}
+
+/* 1. Music Icon (Vinyl Disc) */
+.music-pill-disc
+{
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #5C3224, #26140F 70%);
+    border: 1.5px solid rgba(214, 167, 122, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #D6A77A;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    outline: none;
+}
+
+.music-pill-disc:hover
+{
+    transform: scale(1.08);
+    border-color: #F4E8D8;
+    color: #FFF;
+}
+
+.music-pill-disc:focus-visible
+{
+    outline: 2px solid #D6A77A;
+    outline-offset: 2px;
+}
+
+.music-pill.is-active .music-pill-disc .disc-icon
+{
+    animation: vinylSpin 3.5s linear infinite;
+    display: inline-block;
+    color: #F4E8D8;
+}
+
+/* 2. Song Information */
+.music-pill-info
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-width: 90px;
+    max-width: 145px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.pill-track-title
+{
+    font-family: 'Manrope', sans-serif;
+    font-size: 11.5px;
+    font-weight: 800;
+    color: #F4E8D8;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.25;
+}
+
+.pill-track-artist
+{
+    font-family: 'Manrope', sans-serif;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: rgba(214, 167, 122, 0.85);
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
+/* Circular Buttons Common */
+.music-pill-btn
+{
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+    outline: none;
+    user-select: none;
+}
+
+.music-pill-btn:focus-visible
+{
+    outline: 2px solid #D6A77A;
+    outline-offset: 2px;
+}
+
+/* 3. Play Button */
+.music-pill-play-btn
+{
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, rgba(214, 167, 122, 0.3), rgba(185, 130, 90, 0.4));
+    border: 1.5px solid rgba(214, 167, 122, 0.55);
+    color: #F4E8D8;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+    margin-left: 2px;
+}
+
+.music-pill-play-btn:hover
+{
+    background: linear-gradient(135deg, rgba(214, 167, 122, 0.5), rgba(185, 130, 90, 0.6));
+    border-color: #D6A77A;
+    color: #FFFFFF;
+    transform: scale(1.08);
+    box-shadow: 0 4px 14px rgba(214, 167, 122, 0.4);
+}
+
+.music-pill-play-btn:active
+{
+    transform: scale(0.95);
+}
+
+.pill-play-icon
+{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    line-height: 1;
+    padding-left: 2px;
+}
+
+.pill-play-icon.is-playing
+{
+    padding-left: 0;
+    font-size: 10px;
+}
+
+/* 4. Secondary Action Button (Expand / Details) */
+.music-pill-expand-btn
+{
+    width: 28px;
+    height: 28px;
+    background: rgba(185, 130, 90, 0.16);
+    border: 1px solid rgba(214, 167, 122, 0.32);
+    color: #D6A77A;
+    font-size: 11px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+    margin-left: -2px;
+}
+
+.music-pill-expand-btn:hover
+{
+    background: rgba(214, 167, 122, 0.35);
+    border-color: #D6A77A;
+    color: #FFFFFF;
+    transform: scale(1.08);
+    box-shadow: 0 3px 10px rgba(185, 130, 90, 0.3);
+}
+
+.music-pill-expand-btn:active
+{
+    transform: scale(0.95);
+}
+
+.expand-icon
+{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    line-height: 1;
+}
+
+/* Expanded Player Card */
+.music-card
+{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 320px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(214, 167, 122, 0.4) transparent;
+    background: rgba(36, 19, 15, 0.94);
+    border: 1px solid rgba(214, 167, 122, 0.38);
+    border-radius: 16px;
+    padding: 18px 20px;
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), 0 0 20px rgba(185, 130, 90, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transform-origin: bottom right;
+}
+
+.music-card::-webkit-scrollbar
+{
+    width: 4px;
+}
+
+.music-card::-webkit-scrollbar-thumb
+{
+    background: rgba(214, 167, 122, 0.35);
+    border-radius: 4px;
+}
+
+.music-card::-webkit-scrollbar-track
+{
+    background: transparent;
+}
+
+.music-card.is-collapsed
+{
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.92) translateY(16px);
+    display: none;
+}
+
+.music-card-header
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.music-card-meta
+{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.music-card-badge
+{
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #D6A77A;
+}
+
+.music-card-title
+{
+    font-size: 15px;
+    font-weight: 800;
+    color: #F4E8D8;
+    line-height: 1.2;
+}
+
+.music-card-artist
+{
+    font-size: 11.5px;
+    font-weight: 600;
+    color: rgba(214, 167, 122, 0.85);
+}
+
+.music-card-minimize-btn
+{
+    background: rgba(185, 130, 90, 0.15);
+    border: 1px solid rgba(214, 167, 122, 0.3);
+    border-radius: 50%;
+    color: #D6A77A;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.15s ease;
+}
+
+.music-card-minimize-btn:hover
+{
+    background: rgba(214, 167, 122, 0.35);
+    color: #F4E8D8;
+}
+
+/* Vinyl Centerpiece */
+.music-visual-center
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.vinyl-disc
+{
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #24130F 25%, #150B08 30%, #301A14 60%, #150B08 90%, #3F231A 100%);
+    border: 2px solid rgba(214, 167, 122, 0.3);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.vinyl-disc.is-spinning
+{
+    animation: vinylSpin 4s linear infinite;
+}
+
+@keyframes vinylSpin
+{
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.vinyl-grooves
+{
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    border: 1px dashed rgba(214, 167, 122, 0.2);
+}
+
+.vinyl-label
+{
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #B9825A, #8F5E38);
+    border: 2px solid #24130F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #24130F;
+    font-size: 13px;
+    font-weight: 800;
+}
+
+/* Progress / Timeline */
+.music-progress-section
+{
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.music-timeline-track
+{
+    width: 100%;
+    height: 6px;
+    background: rgba(185, 130, 90, 0.2);
+    border-radius: 999px;
+    position: relative;
+    cursor: pointer;
+}
+
+.music-timeline-fill
+{
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #D6A77A, #F4E8D8);
+    border-radius: 999px;
+    pointer-events: none;
+}
+
+.music-timeline-handle
+{
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    width: 12px;
+    height: 12px;
+    background: #F4E8D8;
+    border: 2px solid #5A3426;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.music-time-display
+{
+    display: flex;
+    justify-content: space-between;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: rgba(214, 167, 122, 0.8);
+}
+
+/* Controls */
+.music-controls-row
+{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.music-ctrl-btn
+{
+    background: rgba(185, 130, 90, 0.15);
+    border: 1px solid rgba(214, 167, 122, 0.3);
+    color: #F4E8D8;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    padding: 0;
+}
+
+.music-ctrl-btn:hover
+{
+    background: rgba(214, 167, 122, 0.3);
+    transform: scale(1.06);
+}
+
+.music-play-btn
+{
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #B9825A, #8F5E38);
+    border: 1px solid rgba(244, 232, 216, 0.4);
+    font-size: 16px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.music-play-btn:hover
+{
+    transform: scale(1.08);
+    filter: brightness(1.1);
+}
+
+/* Secondary Row */
+.music-secondary-row
+{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 4px;
+    border-top: 1px solid rgba(214, 167, 122, 0.15);
+}
+
+.music-volume-group
+{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+}
+
+.music-vol-btn
+{
+    background: none;
+    border: none;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.music-vol-slider
+{
+    width: 70px;
+    height: 4px;
+    accent-color: #D6A77A;
+    cursor: pointer;
+}
+
+.music-playlist-toggle-btn
+{
+    background: rgba(185, 130, 90, 0.15);
+    border: 1px solid rgba(214, 167, 122, 0.25);
+    color: #D6A77A;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.music-playlist-toggle-btn:hover,
+.music-playlist-toggle-btn.is-active
+{
+    background: rgba(214, 167, 122, 0.3);
+    color: #F4E8D8;
+    border-color: #D6A77A;
+}
+
+/* Playlist Drawer */
+.music-playlist-drawer
+{
+    background: rgba(25, 12, 9, 0.85);
+    border: 1px solid rgba(214, 167, 122, 0.25);
+    border-radius: 10px;
+    padding: 10px;
+    max-height: 150px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.music-playlist-drawer.is-closed
+{
+    display: none;
+}
+
+.playlist-header-title
+{
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: #D6A77A;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.playlist-list
+{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.playlist-item
+{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: rgba(185, 130, 90, 0.08);
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.playlist-item:hover
+{
+    background: rgba(185, 130, 90, 0.2);
+}
+
+.playlist-item.is-active-track
+{
+    background: rgba(214, 167, 122, 0.25);
+    border: 1px solid rgba(214, 167, 122, 0.4);
+}
+
+.playlist-track-num
+{
+    font-size: 10px;
+    font-weight: 800;
+    color: #D6A77A;
+    width: 14px;
+}
+
+.playlist-track-details
+{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+}
+
+.playlist-track-name
+{
+    font-size: 11px;
+    font-weight: 700;
+    color: #F4E8D8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.playlist-track-sub
+{
+    font-size: 9.5px;
+    color: rgba(214, 167, 122, 0.7);
+}
+
+/* Suggest a Song */
+.music-suggest-section
+{
+    padding-top: 4px;
+}
+
+.music-suggest-action-btn
+{
+    width: 100%;
+    background: rgba(185, 130, 90, 0.15);
+    border: 1px dashed rgba(214, 167, 122, 0.4);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: #D6A77A;
+    font-family: 'Manrope', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.music-suggest-action-btn:hover
+{
+    background: rgba(214, 167, 122, 0.25);
+    border-style: solid;
+    color: #F4E8D8;
+    transform: translateY(-1px);
+}
+
+.music-error-notice
+{
+    display: none;
+    font-size: 10.5px;
+    color: #FF8F82;
+    background: rgba(255, 114, 98, 0.12);
+    border: 1px solid rgba(255, 114, 98, 0.3);
+    padding: 6px 10px;
+    border-radius: 6px;
+    text-align: center;
+}
+
+/* Suggestion Modal Overlay */
+.music-suggest-overlay
+{
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Manrope', sans-serif;
+}
+
+.music-suggest-overlay.is-hidden
+{
+    display: none !important;
+}
+
+.music-suggest-backdrop
+{
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 8, 6, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.music-suggest-card
+{
+    position: relative;
+    z-index: 2;
+    width: 440px;
+    max-width: calc(100vw - 32px);
+    background: rgba(36, 19, 15, 0.94);
+    border: 1px solid rgba(214, 167, 122, 0.38);
+    border-radius: 16px;
+    padding: 24px 26px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), 0 0 24px rgba(185, 130, 90, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.music-suggest-header
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.music-suggest-badge
+{
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #D6A77A;
+    display: inline-block;
+    margin-bottom: 2px;
+}
+
+.music-suggest-title
+{
+    font-size: 18px;
+    font-weight: 800;
+    color: #F4E8D8;
+    margin: 0;
+}
+
+.music-suggest-subtitle
+{
+    font-size: 11.5px;
+    color: rgba(214, 167, 122, 0.8);
+    margin: 3px 0 0 0;
+}
+
+.music-suggest-close-btn
+{
+    background: rgba(185, 130, 90, 0.15);
+    border: 1px solid rgba(214, 167, 122, 0.3);
+    border-radius: 50%;
+    color: #D6A77A;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.15s ease;
+}
+
+.music-suggest-close-btn:hover
+{
+    background: rgba(214, 167, 122, 0.35);
+    color: #F4E8D8;
+}
+
+.music-suggest-form
+{
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.suggest-field
+{
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.suggest-field label
+{
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #D6A77A;
+}
+
+.suggest-field .req
+{
+    color: #FF7262;
+}
+
+.suggest-field .opt
+{
+    color: rgba(214, 167, 122, 0.6);
+    font-size: 9px;
+    text-transform: none;
+}
+
+.suggest-field input,
+.suggest-field textarea
+{
+    width: 100%;
+    padding: 8px 12px;
+    background: rgba(185, 130, 90, 0.12);
+    border: 1px solid rgba(214, 167, 122, 0.28);
+    border-radius: 8px;
+    font-family: 'Manrope', sans-serif;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #F4E8D8;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.suggest-field input:focus,
+.suggest-field textarea:focus
+{
+    outline: none;
+    border-color: #D6A77A;
+    background: rgba(185, 130, 90, 0.2);
+    box-shadow: 0 0 0 2px rgba(214, 167, 122, 0.2);
+}
+
+.suggest-field input.has-error,
+.suggest-field textarea.has-error
+{
+    border-color: #FF7262;
+    background: rgba(255, 114, 98, 0.1);
+}
+
+.suggest-error
+{
+    display: none;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #FF8F82;
+}
+
+.suggest-actions
+{
+    margin-top: 4px;
+}
+
+.suggest-submit-btn
+{
+    width: 100%;
+    background: linear-gradient(135deg, #B9825A, #8F5E38);
+    border: 1px solid rgba(244, 232, 216, 0.35);
+    color: #F4E8D8;
+    font-family: 'Manrope', sans-serif;
+    font-size: 12.5px;
+    font-weight: 800;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.suggest-submit-btn:hover:not(:disabled)
+{
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+.suggest-submit-btn:disabled
+{
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.suggest-feedback
+{
+    display: none;
+    font-size: 11.5px;
+    font-weight: 600;
+    text-align: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-top: 4px;
+}
+
+.suggest-feedback.is-success
+{
+    display: block;
+    background: rgba(133, 227, 156, 0.15);
+    border: 1px solid rgba(133, 227, 156, 0.4);
+    color: #85E39C;
+}
+
+.suggest-feedback.is-error
+{
+    display: block;
+    background: rgba(255, 114, 98, 0.15);
+    border: 1px solid rgba(255, 114, 98, 0.4);
+    color: #FF8F82;
+}
+
+/* Responsive */
+@media (max-width: 768px)
+{
+    .music-player-hud
+    {
+        bottom: 80px;
+        right: 20px;
+        z-index: 125;
+    }
+
+    .music-card
+    {
+        width: calc(100vw - 40px);
+        max-width: 340px;
+        max-height: 75vh;
+        overflow-y: auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce)
+{
+    .vinyl-disc.is-spinning,
+    .music-pill.is-active .music-pill-disc .disc-icon
+    {
+        animation: none !important;
+    }
+    
+    .music-card,
+    .music-pill
+    {
+        transition: opacity 0.2s ease !important;
+    }
+}
