@@ -117,7 +117,7 @@ export default class Project
         this.floor = {}
 
         this.floor.x = 0
-        this.floor.y = - 2
+        this.floor.y = - 2.75
 
         // Container
         this.floor.container = new THREE.Object3D()
@@ -132,7 +132,7 @@ export default class Project
         {
             const canvas = document.createElement('canvas')
             canvas.width = 2048
-            canvas.height = 1024
+            canvas.height = 1216
             const ctx = canvas.getContext('2d')
 
             // Clear transparent
@@ -193,7 +193,7 @@ export default class Project
 
             // Interactive drive button pill
             const pillX = 120
-            const pillY = Math.max(590, currentY + 30)
+            const pillY = Math.max(650, currentY + 28)
             const pillWidth = 580
             const pillHeight = 88
             const pillCenterX = pillX + pillWidth * 0.5

@@ -48,7 +48,7 @@ export default class ProjectsSection {
 
     setGeometries() {
         this.geometries = {}
-        this.geometries.floor = new THREE.PlaneGeometry(16, 8)
+        this.geometries.floor = new THREE.PlaneGeometry(16, 9.5)
     }
 
     setMeshes() {
@@ -105,7 +105,7 @@ export default class ProjectsSection {
                 {
                     href: 'https://www.behance.net/gallery/246296419/Adcoop-(Food-Retail)',
                     x: - 4.8,
-                    y: - 2.6,
+                    y: - 2.8,
                     halfExtents:
                     {
                         x: 2.8,
@@ -138,7 +138,7 @@ export default class ProjectsSection {
                 {
                     href: 'https://www.behance.net/gallery/246523763/Kalam-Game',
                     x: - 4.8,
-                    y: - 2.6,
+                    y: - 2.8,
                     halfExtents:
                     {
                         x: 2.8,
@@ -170,7 +170,7 @@ export default class ProjectsSection {
                 {
                     href: 'https://www.behance.net/gallery/246524943/Serh-Group-Website',
                     x: - 4.8,
-                    y: - 2.6,
+                    y: - 2.8,
                     halfExtents:
                     {
                         x: 2.8,
@@ -196,7 +196,7 @@ export default class ProjectsSection {
                 {
                     href: 'https://designeranimesh.framer.ai/projects/comming-soon',
                     x: - 4.8,
-                    y: - 2.6,
+                    y: - 2.8,
                     halfExtents:
                     {
                         x: 2.8,
