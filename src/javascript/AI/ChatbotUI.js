@@ -12,6 +12,9 @@ export default class ChatbotUI extends EventEmitter
         this.isVoiceOutputEnabled = false
         this.isListening = false
         this.recognition = null
+        this.currentSpeechId = 0
+        this.currentUtterance = null
+        this.activeAbortController = null
 
         this.initDOM()
         this.initSpeechRecognition()
@@ -19,7 +22,7 @@ export default class ChatbotUI extends EventEmitter
 
         // Greet user with welcome message and primary suggested portfolio questions
         this.addAssistantMessage({
-            answer: "Hi! I'm Animesh's AI Portfolio Assistant. I can answer anything about his projects, design skills, tools, experience, and background. What would you like to explore?",
+            answer: "Hi! I'm Ani, Animesh's AI Portfolio Assistant. I can answer anything about his projects, design skills, tools, experience, and background. What would you like to explore?",
             intent: 'ABOUT_ME',
             project: null,
             caseStudyUrl: null,
@@ -42,8 +45,10 @@ export default class ChatbotUI extends EventEmitter
         this.triggerBtn.className = 'ai-assistant-trigger'
         this.triggerBtn.setAttribute('aria-label', 'Open AI portfolio assistant')
         this.triggerBtn.innerHTML = `
-            <span class="ai-trigger-icon">✨</span>
-            <span class="ai-trigger-label">AI Guide</span>
+            <span class="ai-trigger-icon">
+                <img src="/character.png" alt="Ani" class="ai-trigger-img" />
+            </span>
+            <span class="ai-trigger-label">Ani</span>
             <span class="ai-trigger-badge">Gemini</span>
         `
         document.body.appendChild(this.triggerBtn)
@@ -55,9 +60,11 @@ export default class ChatbotUI extends EventEmitter
         this.panel.innerHTML = `
             <div class="ai-panel-header">
                 <div class="ai-header-brand">
-                    <div class="ai-avatar">✨</div>
+                    <div class="ai-avatar">
+                        <img src="/character.png" alt="Ani" class="ai-avatar-img" />
+                    </div>
                     <div class="ai-header-titles">
-                        <div class="ai-header-name">Portfolio Assistant</div>
+                        <div class="ai-header-name">Ani</div>
                         <div class="ai-header-status">
                             <span class="ai-status-indicator"></span>
                             <span class="ai-status-text">Gemini Intelligence Active</span>
@@ -65,7 +72,7 @@ export default class ChatbotUI extends EventEmitter
                     </div>
                 </div>
                 <div class="ai-header-actions">
-                    <button type="button" id="ai-voice-toggle" class="ai-header-btn" title="Toggle Voice Speech Output" aria-label="Toggle speech audio">
+                    <button type="button" id="ai-voice-toggle" class="ai-header-btn" title="Enable Voice Speech Output" aria-label="Toggle speech audio">
                         <span class="voice-icon">🔇</span>
                     </button>
                     <button type="button" id="ai-close-btn" class="ai-header-btn ai-close-btn" title="Close Chat" aria-label="Close chat">
@@ -217,6 +224,13 @@ export default class ChatbotUI extends EventEmitter
         this.voiceToggleBtn.addEventListener('click', () =>
         {
             this.isVoiceOutputEnabled = !this.isVoiceOutputEnabled
+
+            if(!this.isVoiceOutputEnabled)
+            {
+                // MUTE: Immediately cancel all active and queued speech
+                this.stopSpeech()
+            }
+
             const icon = this.voiceToggleBtn.querySelector('.voice-icon')
             if(icon)
             {
@@ -282,12 +296,52 @@ export default class ChatbotUI extends EventEmitter
         this.textInput.focus()
     }
 
+    stopSpeech()
+    {
+        // Invalidate any active speech token to prevent late async callbacks from speaking
+        this.currentSpeechId++
+
+        if(window.speechSynthesis)
+        {
+            try
+            {
+                window.speechSynthesis.cancel()
+            }
+            catch(err)
+            {
+                console.warn('Could not cancel speech synthesis:', err)
+            }
+        }
+        this.currentUtterance = null
+    }
+
     close()
     {
         this.isOpen = false
         this.panel.classList.add('is-closed')
         this.triggerBtn.classList.remove('is-panel-open')
         this.textInput.blur()
+
+        // Stop speech recognition if listening
+        if(this.isListening)
+        {
+            this.stopListening()
+        }
+
+        // CLOSE: Immediately stop and cancel all active and queued chatbot speech
+        this.stopSpeech()
+
+        // Abort in-flight AI network request if currently pending so it doesn't speak in background
+        if(this.activeAbortController)
+        {
+            try
+            {
+                this.activeAbortController.abort()
+            }
+            catch(e) {}
+            this.activeAbortController = null
+            this.hideTyping()
+        }
     }
 
     addUserMessage(text)
@@ -372,7 +426,8 @@ export default class ChatbotUI extends EventEmitter
 
         this.conversationHistory.push({ sender: 'assistant', text: data.answer })
 
-        if(speak && this.isVoiceOutputEnabled)
+        // Check strictly that speech is allowed, voice output is currently enabled, and panel is open
+        if(speak && this.isVoiceOutputEnabled && this.isOpen)
         {
             this.speak(data.answer)
         }
@@ -408,6 +463,21 @@ export default class ChatbotUI extends EventEmitter
 
     async submitQuery(text)
     {
+        // Cancel any active speech before starting a new query
+        this.stopSpeech()
+
+        // Abort previous in-flight request if user submits again quickly
+        if(this.activeAbortController)
+        {
+            try
+            {
+                this.activeAbortController.abort()
+            }
+            catch(e) {}
+        }
+        this.activeAbortController = new AbortController()
+        const querySpeechId = ++this.currentSpeechId
+
         this.addUserMessage(text)
         this.showTyping()
 
@@ -418,6 +488,7 @@ export default class ChatbotUI extends EventEmitter
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                signal: this.activeAbortController.signal,
                 body: JSON.stringify({
                     message: text,
                     conversationHistory: this.conversationHistory
@@ -425,6 +496,7 @@ export default class ChatbotUI extends EventEmitter
             })
 
             this.hideTyping()
+            this.activeAbortController = null
 
             if(!response.ok)
             {
@@ -432,11 +504,23 @@ export default class ChatbotUI extends EventEmitter
             }
 
             const data = await response.json()
-            this.addAssistantMessage(data, true)
+
+            // Strict race condition check:
+            // Only speak if chatbot is still open, voice is enabled, and this query is still the latest active one
+            const canSpeak = this.isOpen && this.isVoiceOutputEnabled && (this.currentSpeechId === querySpeechId)
+            this.addAssistantMessage(data, canSpeak)
         }
         catch(err)
         {
             this.hideTyping()
+            this.activeAbortController = null
+
+            // If request was aborted because chatbot closed or new query submitted, do nothing
+            if(err.name === 'AbortError')
+            {
+                return
+            }
+
             console.error('Chatbot error:', err)
             this.addAssistantMessage({
                 answer: "I'm having a brief connection delay with the AI service. Animesh's full portfolio and project case studies remain available directly below!",
@@ -454,17 +538,43 @@ export default class ChatbotUI extends EventEmitter
 
     speak(text)
     {
-        if(!window.speechSynthesis || !this.isVoiceOutputEnabled) return
+        // Strict guard: verify speech API, voice enabled state, and open panel state
+        if(!window.speechSynthesis || !this.isVoiceOutputEnabled || !this.isOpen) return
 
         try
         {
-            window.speechSynthesis.cancel() // Stop any current speech
-            // Strip emojis/markdown from speech
+            this.stopSpeech()
+
             const cleanText = text.replace(/[\u{1F300}-\u{1F9FF}]/gu, '').replace(/[#*`_]/g, '').trim()
+            if(!cleanText) return
+
+            const speechId = this.currentSpeechId
             const utterance = new SpeechSynthesisUtterance(cleanText)
             utterance.rate = 1.05
             utterance.pitch = 1.0
-            window.speechSynthesis.speak(utterance)
+
+            utterance.onend = () =>
+            {
+                if(this.currentUtterance === utterance)
+                {
+                    this.currentUtterance = null
+                }
+            }
+
+            utterance.onerror = (e) =>
+            {
+                if(this.currentUtterance === utterance)
+                {
+                    this.currentUtterance = null
+                }
+            }
+
+            // Final check right before queuing speech
+            if(this.isOpen && this.isVoiceOutputEnabled && (this.currentSpeechId === speechId))
+            {
+                this.currentUtterance = utterance
+                window.speechSynthesis.speak(utterance)
+            }
         }
         catch(e)
         {

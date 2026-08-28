@@ -48,7 +48,6 @@
     <header class="portfolio-hud">
         <div class="hud-brand">
             <span class="brand-name">ANIMESH GUPTA</span>
-            <span class="brand-badge">PRODUCT DESIGNER</span>
         </div>
         <div class="hud-location">
             <span class="location-dot"></span>
@@ -112,47 +111,85 @@
         </div>
     </aside>
 
-    <!-- Floating Intro for Start Screen Only -->
-    <aside class="start-floating-intro" id="startScreenIntro" aria-label="About the designer">
-        <div class="start-intro-card">
-            <div class="start-intro-experience">
-                <span class="start-intro-badge">PRODUCT &amp; GAME DESIGNER</span>
-                <p class="start-intro-summary">3+ years crafting intuitive digital products, SaaS interfaces &amp; tactile interactive experiences.</p>
+    <!-- Left-Side Start Screen Column -->
+    <div class="start-left-column" id="startLeftColumn">
+        <!-- Floating Intro for Start Screen Only -->
+        <aside class="start-floating-intro" id="startScreenIntro" aria-label="About the designer">
+            <div class="start-intro-card">
+                <div class="start-intro-experience">
+                    <span class="start-intro-badge">PRODUCT &amp; GAME DESIGNER</span>
+                    <p class="start-intro-summary">3+ years crafting intuitive digital products, SaaS interfaces &amp; tactile interactive experiences.</p>
+                </div>
+                <div class="start-intro-divider"></div>
+                <div class="start-intro-tagline">
+                    <p class="tagline-phrase">Designer by passion,</p>
+                    <p class="tagline-phrase">coder by rent money.</p>
+                    <p class="tagline-phrase">Creating beautiful things</p>
+                    <p class="tagline-phrase">while debugging ugly code</p>
+                    <p class="tagline-phrase">to pay for my creativity.</p>
+                    <p class="tagline-irony">(The irony is real)</p>
+                </div>
+                <div class="start-intro-skills-grid">
+                    <div class="skill-item">
+                        <span class="skill-bullet"></span>
+                        <span class="skill-label">Product Strategy</span>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-bullet"></span>
+                        <span class="skill-label">UI/UX Design</span>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-bullet"></span>
+                        <span class="skill-label">Game Design</span>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-bullet"></span>
+                        <span class="skill-label">Frontend Development</span>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-bullet"></span>
+                        <span class="skill-label">Prototyping</span>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-bullet"></span>
+                        <span class="skill-label">Design Systems</span>
+                    </div>
+                </div>
+                <p class="start-intro-closing">I blend creativity with logic to build engaging experiences that are thoughtful, functional and a little bit playful.</p>
             </div>
-            <div class="start-intro-tagline">
-                <p class="tagline-phrase">Designer by passion,</p>
-                <p class="tagline-phrase">coder by rent money.</p>
-                <p class="tagline-phrase">Creating beautiful things</p>
-                <p class="tagline-phrase">while debugging ugly code</p>
-                <p class="tagline-phrase">to pay for my creativity.</p>
-                <p class="tagline-irony">(The irony is real)</p>
-            </div>
-        </div>
-    </aside>
+        </aside>
 
-    <div class="instructions-hud" id="instructionsHud">
-        <div class="hud-card">
-            <div class="hud-title">WELCOME TO ANIMESH'S WORLD</div>
-            <div class="hud-subtitle">Drive. Explore. Discover the work.</div>
-            <div class="hud-controls">
-                <div class="key-group">
-                    <span class="key">W</span>
-                    <span class="key">A</span>
-                    <span class="key">S</span>
-                    <span class="key">D</span>
-                    <span class="key-label">or ARROWS to drive</span>
-                </div>
-                <div class="key-group">
-                    <span class="key">SPACE</span>
-                    <span class="key-label">brake / drift</span>
-                </div>
-                <div class="key-group">
-                    <span class="key">H</span>
-                    <span class="key-label">horn</span>
+        <!-- Lower Welcome / Driving Controls Card -->
+        <div class="instructions-hud" id="instructionsHud">
+            <div class="hud-card">
+                <div class="hud-title">WELCOME TO ANIMESH'S WORLD</div>
+                <div class="hud-subtitle">Drive. Explore. Discover the work.</div>
+                <p class="hud-description">Explore my work, projects, experiments and design journey through an interactive 3D portfolio.</p>
+                <div class="hud-controls">
+                    <div class="key-group">
+                        <span class="key">W</span>
+                        <span class="key">A</span>
+                        <span class="key">S</span>
+                        <span class="key">D</span>
+                        <span class="key-label">or ARROWS to drive</span>
+                    </div>
+                    <div class="key-group">
+                        <span class="key">SPACE</span>
+                        <span class="key-label">brake / drift</span>
+                    </div>
+                    <div class="key-group">
+                        <span class="key">H</span>
+                        <span class="key-label">horn</span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Right-Side Character for Start Screen Only -->
+    <aside class="start-character" id="startCharacter" aria-hidden="true">
+        <img class="start-character-img" id="startCharacterImg" src="/character.png" alt="Animesh Gupta" />
+    </aside>
 
     <script type="module" src="./index.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-FR8P17NWKF"></script>

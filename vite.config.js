@@ -27,6 +27,23 @@ function musicStaticPlugin()
                         return
                     }
                 }
+                else if(pathname !== '/' && !pathname.startsWith('/@') && !pathname.startsWith('/src'))
+                {
+                    const decoded = decodeURIComponent(pathname.replace(/^\//, ''))
+                    const filePath = resolve(process.cwd(), 'public', decoded)
+                    if(fs.existsSync(filePath) && fs.statSync(filePath).isFile())
+                    {
+                        const ext = decoded.split('.').pop().toLowerCase()
+                        const mimes = { 'png': 'image/png', 'jpg': 'image/jpeg', 'jpeg': 'image/jpeg', 'webp': 'image/webp', 'svg': 'image/svg+xml' }
+                        if(mimes[ext])
+                        {
+                            res.setHeader('Content-Type', mimes[ext])
+                            const stream = fs.createReadStream(filePath)
+                            stream.pipe(res)
+                            return
+                        }
+                    }
+                }
                 next()
             })
         },

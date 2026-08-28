@@ -267,6 +267,10 @@ export default class Application
                     if(startIntro && !startIntro.classList.contains('is-hidden'))
                     {
                         startIntro.classList.add('is-hidden')
+                        if(this.world && this.world.setCharacterState)
+                        {
+                            this.world.setCharacterState('playground')
+                        }
                     }
                     if(hud && !hud.classList.contains('is-hidden'))
                     {

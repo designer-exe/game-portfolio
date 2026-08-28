@@ -600,7 +600,7 @@ Explore any case study through the links below, or manually drive your car throu
     if(q.includes('hello') || q.includes('hi') || q.includes('hey'))
     {
         return {
-            answer: `Hi! I'm Animesh's AI Portfolio Assistant. Animesh Gupta is a Product & Game Designer with 3+ years of experience blending purposeful UX with playful interaction. Ask me anything about his projects, skills, tools, or design philosophy!`,
+            answer: `Hi! I'm Ani, Animesh's AI Portfolio Assistant. Animesh Gupta is a Product & Game Designer with 3+ years of experience blending purposeful UX with playful interaction. Ask me anything about his projects, skills, tools, or design philosophy!`,
             intent: 'ABOUT_ME',
             project: null,
             caseStudyUrl: null,

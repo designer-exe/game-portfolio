@@ -262,6 +262,19 @@ export default class World
         this.startingScreen.startLabel.mesh.matrixAutoUpdate = false
         this.container.add(this.startingScreen.startLabel.mesh)
 
+        // Character image fallback check
+        const charImg = document.getElementById('startCharacterImg')
+        if(charImg)
+        {
+            const standaloneTest = new Image()
+            standaloneTest.onload = () =>
+            {
+                charImg.src = '/character.png'
+                charImg.classList.add('is-standalone')
+            }
+            standaloneTest.src = '/character.png'
+        }
+
         // Progress
         this.resources.on('progress', (_progress) =>
         {
@@ -292,6 +305,7 @@ export default class World
                 {
                     startIntro.classList.add('is-hidden')
                 }
+                this.setCharacterState('playground', true)
 
                 this.start()
 
@@ -309,6 +323,7 @@ export default class World
                     gsap.to(this.startingScreen.area.floorBorder.material.uniforms.uAlpha, { value: 0.3, duration: 0.3 })
                     gsap.to(this.startingScreen.loadingLabel.material, { opacity: 0, duration: 0.3 })
                     gsap.to(this.startingScreen.startLabel.material, { opacity: 1, duration: 0.3, delay: 0.3 })
+                    this.setCharacterState('start', true)
                 })
             }
         })
@@ -326,6 +341,7 @@ export default class World
             {
                 startIntro.classList.add('is-hidden')
             }
+            this.setCharacterState('playground')
 
             this.start()
 
@@ -334,6 +350,64 @@ export default class World
                 this.reveal.go()
             }, 600)
         })
+    }
+
+    setCharacterState(state, immediate = false)
+    {
+        const startChar = document.getElementById('startCharacter')
+        if(!startChar) return
+
+        if(state === 'playground')
+        {
+            if(startChar.classList.contains('is-playground') && !startChar.classList.contains('is-hidden')) return
+
+            if(immediate)
+            {
+                startChar.classList.remove('is-hidden')
+                startChar.classList.add('is-playground')
+                startChar.style.opacity = ''
+                startChar.style.transform = ''
+                return
+            }
+
+            // Smooth crossfade: fade out large, then reveal small floating character
+            startChar.style.transition = 'opacity 0.35s ease, transform 0.35s ease'
+            startChar.style.opacity = '0'
+            startChar.style.transform = 'translateY(10px)'
+
+            window.setTimeout(() =>
+            {
+                startChar.classList.remove('is-hidden')
+                startChar.classList.add('is-playground')
+                startChar.style.opacity = ''
+                startChar.style.transform = ''
+                startChar.style.transition = ''
+            }, 350)
+        }
+        else if(state === 'start')
+        {
+            if(!startChar.classList.contains('is-playground') && !startChar.classList.contains('is-hidden')) return
+
+            if(immediate)
+            {
+                startChar.classList.remove('is-playground')
+                startChar.classList.remove('is-hidden')
+                startChar.style.opacity = ''
+                startChar.style.transform = ''
+                return
+            }
+
+            startChar.style.transition = 'opacity 0.35s ease, transform 0.35s ease'
+            startChar.style.opacity = '0'
+
+            window.setTimeout(() =>
+            {
+                startChar.classList.remove('is-playground')
+                startChar.classList.remove('is-hidden')
+                startChar.style.opacity = ''
+                startChar.style.transition = ''
+            }, 350)
+        }
     }
 
     setSounds()
@@ -693,6 +767,7 @@ export default class World
             {
                 startIntro.classList.add('is-hidden')
             }
+            this.setCharacterState('playground')
 
             this.start()
             if(this.reveal)
