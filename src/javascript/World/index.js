@@ -224,6 +224,19 @@ export default class World
     {
         this.startingScreen = {}
 
+        // Target 4: On mobile only (<= 768px), auto-fade welcome guide after ~4 seconds from start screen open
+        if(window.innerWidth <= 768 || window.matchMedia('(max-width: 768px)').matches)
+        {
+            window.setTimeout(() =>
+            {
+                const hud = document.getElementById('instructionsHud')
+                if(hud && !hud.classList.contains('is-hidden'))
+                {
+                    hud.classList.add('is-hidden')
+                }
+            }, 4000)
+        }
+
         // Area
         this.startingScreen.area = this.areas.add({
             position: new THREE.Vector2(0, 0),
@@ -305,6 +318,13 @@ export default class World
                 {
                     startIntro.classList.add('is-hidden')
                 }
+
+                const mobileStartBtn = document.getElementById('mobileStartBtn')
+                if(mobileStartBtn)
+                {
+                    mobileStartBtn.classList.add('is-hidden')
+                }
+
                 this.setCharacterState('playground', true)
 
                 this.start()
@@ -328,6 +348,27 @@ export default class World
             }
         })
 
+        // Mobile Start Button wiring
+        const mobileStartBtn = document.getElementById('mobileStartBtn')
+        if(mobileStartBtn)
+        {
+            const handleMobileStart = (e) =>
+            {
+                if(e) e.preventDefault()
+                if(this.controls && this.controls.setTouch && !this.controls.touch)
+                {
+                    this.config.touch = true
+                    this.controls.setTouch()
+                }
+                if(this.startingScreen.area && this.startingScreen.area.active)
+                {
+                    this.startingScreen.area.interact(false)
+                }
+            }
+            mobileStartBtn.addEventListener('click', handleMobileStart)
+            mobileStartBtn.addEventListener('touchend', handleMobileStart)
+        }
+
         // On interact, reveal
         this.startingScreen.area.on('interact', () =>
         {
@@ -341,6 +382,19 @@ export default class World
             {
                 startIntro.classList.add('is-hidden')
             }
+
+            const hud = document.getElementById('instructionsHud')
+            if(hud)
+            {
+                hud.classList.add('is-hidden')
+            }
+
+            const mobileStartBtn = document.getElementById('mobileStartBtn')
+            if(mobileStartBtn)
+            {
+                mobileStartBtn.classList.add('is-hidden')
+            }
+
             this.setCharacterState('playground')
 
             this.start()

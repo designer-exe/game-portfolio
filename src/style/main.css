@@ -528,6 +528,12 @@ html
     }
 }
 
+/* Mobile-only Start CTA: hidden by default on desktop */
+.mobile-start-btn
+{
+    display: none;
+}
+
 @media (max-width: 1024px)
 {
     .start-character.is-playground
@@ -873,9 +879,12 @@ html
     
     .instructions-hud
     {
-        bottom: 80px;
-        left: 14px;
-        right: 14px;
+        position: relative;
+        width: 100%;
+        bottom: auto;
+        top: auto;
+        left: auto;
+        right: auto;
     }
 
     .hud-card
@@ -886,10 +895,13 @@ html
 
     .start-floating-intro
     {
-        top: 74px;
-        left: 14px;
-        right: 14px;
-        max-width: calc(100vw - 28px);
+        position: relative;
+        width: 100%;
+        top: auto;
+        bottom: auto;
+        left: auto;
+        right: auto;
+        max-width: 100%;
     }
 
     .start-intro-card
@@ -2588,15 +2600,17 @@ html
     /* 2. Left Column & Cards */
     .start-left-column
     {
-        top: 56px !important;
-        left: 14px !important;
-        right: 14px !important;
+        top: calc(56px + env(safe-area-inset-top, 0px)) !important;
+        left: calc(14px + env(safe-area-inset-left, 0px)) !important;
+        right: calc(14px + env(safe-area-inset-right, 0px)) !important;
         width: auto !important;
         max-width: calc(100vw - 28px) !important;
-        max-height: calc(100vh - 170px) !important;
+        max-height: calc(100vh - 145px) !important;
         overflow-y: auto !important;
         overflow-x: hidden !important;
         -webkit-overflow-scrolling: touch !important;
+        display: flex !important;
+        flex-direction: column !important;
         gap: 12px !important;
         pointer-events: auto !important;
         scrollbar-width: thin !important;
@@ -2612,6 +2626,19 @@ html
     {
         background: rgba(214, 167, 122, 0.4);
         border-radius: 4px;
+    }
+
+    .start-floating-intro
+    {
+        position: relative !important;
+        top: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        right: auto !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        pointer-events: auto !important;
     }
 
     .start-intro-card
@@ -2651,6 +2678,28 @@ html
         line-height: 1.45 !important;
     }
 
+    .instructions-hud
+    {
+        position: relative !important;
+        top: auto !important;
+        bottom: auto !important;
+        left: auto !important;
+        right: auto !important;
+        margin: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        pointer-events: auto !important;
+        transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    .instructions-hud.is-hidden
+    {
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        visibility: hidden !important;
+    }
+
     .hud-card
     {
         padding: 12px 14px !important;
@@ -2673,51 +2722,137 @@ html
         line-height: 1.4 !important;
     }
 
-    /* 3. Character Backdrop on Mobile */
+    /* Mobile Start CTA Button (Target 5) */
+    .mobile-start-btn
+    {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        width: 100%;
+        height: 46px;
+        min-height: 46px;
+        margin-top: 2px;
+        background: linear-gradient(135deg, rgba(45, 23, 18, 0.96), rgba(36, 19, 15, 0.98));
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1.5px solid #D6A77A;
+        border-radius: 12px;
+        color: #F4E8D8;
+        font-family: 'Manrope', sans-serif;
+        font-weight: 700;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 16px rgba(185, 130, 90, 0.25);
+        cursor: pointer;
+        pointer-events: auto;
+        user-select: none;
+        box-sizing: border-box;
+        transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, opacity 0.3s ease;
+        animation: mobileStartPulse 2.8s ease-in-out infinite;
+    }
+
+    .mobile-start-btn:active
+    {
+        transform: scale(0.97);
+    }
+
+    .mobile-start-btn.is-hidden
+    {
+        display: none !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+    }
+
+    .mobile-start-icon
+    {
+        font-size: 11px;
+        color: #D6A77A;
+    }
+
+    @keyframes mobileStartPulse
+    {
+        0%, 100%
+        {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 14px rgba(185, 130, 90, 0.25);
+            border-color: rgba(214, 167, 122, 0.85);
+        }
+        50%
+        {
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.6), 0 0 22px rgba(214, 167, 122, 0.45);
+            border-color: #F4E8D8;
+        }
+    }
+
+    /* 3. Character on Mobile (Target 3: Visible, crisp, properly rendered) */
     .start-character
     {
-        right: -15px !important;
-        bottom: 0 !important;
-        height: 52vh !important;
-        max-height: 440px !important;
-        opacity: 0.35 !important;
-        z-index: 1 !important;
+        position: fixed !important;
+        right: calc(8px + env(safe-area-inset-right, 0px)) !important;
+        bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+        top: auto !important;
+        left: auto !important;
+        height: 25vh !important;
+        max-height: 210px !important;
+        min-height: 150px !important;
+        width: auto !important;
+        opacity: 1 !important;
+        z-index: 2 !important;
         pointer-events: none !important;
+        transition: opacity 0.35s ease, transform 0.35s ease !important;
     }
 
     .start-character-img
     {
         height: 100% !important;
-        max-height: 440px !important;
+        width: auto !important;
+        max-height: 210px !important;
+        object-fit: contain !important;
         object-position: right bottom !important;
+        filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.45)) !important;
     }
 
     .start-character.is-playground
     {
-        top: 68px !important;
-        right: 16px !important;
+        position: fixed !important;
+        top: calc(68px + env(safe-area-inset-top, 0px)) !important;
+        right: calc(16px + env(safe-area-inset-right, 0px)) !important;
+        bottom: auto !important;
+        left: auto !important;
         height: auto !important;
+        max-height: none !important;
         opacity: 1 !important;
         z-index: 90 !important;
     }
 
     .start-character.is-playground .start-character-img
     {
-        width: 90px !important;
+        width: 84px !important;
         height: auto !important;
+        max-height: none !important;
+        filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.35)) !important;
     }
 
-    /* 4. Bottom Controls on Mobile */
+    .start-character.is-hidden
+    {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        visibility: hidden !important;
+    }
+
+    /* 4. Bottom Controls on Mobile (Target 1: Music Player above Ani with intentional spacing) */
     .ai-assistant-trigger
     {
-        bottom: 14px !important;
-        right: 14px !important;
+        position: fixed !important;
+        bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+        right: calc(14px + env(safe-area-inset-right, 0px)) !important;
         left: auto !important;
         height: 44px !important;
         min-height: 44px !important;
-        padding: 0 12px !important;
-        gap: 7px !important;
-        z-index: 98 !important;
+        padding: 0 14px !important;
+        gap: 8px !important;
+        z-index: 99 !important;
+        transition: bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease !important;
     }
 
     .ai-trigger-label
@@ -2733,10 +2868,12 @@ html
 
     .music-player-hud
     {
-        bottom: 66px !important;
-        right: 14px !important;
+        position: fixed !important;
+        bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
+        right: calc(14px + env(safe-area-inset-right, 0px)) !important;
         left: auto !important;
-        z-index: 98 !important;
+        z-index: 99 !important;
+        transition: bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s ease !important;
     }
 
     .music-pill
@@ -2746,6 +2883,16 @@ html
         padding: 0 10px 0 6px !important;
         gap: 8px !important;
         max-width: calc(100vw - 28px) !important;
+    }
+
+    .music-card
+    {
+        bottom: 50px !important;
+        right: 0 !important;
+        width: calc(100vw - 28px) !important;
+        max-width: 340px !important;
+        max-height: 65vh !important;
+        overflow-y: auto !important;
     }
 
     .music-pill-track
@@ -2766,12 +2913,12 @@ html
     /* Lift HUD above touch driving controls when driving is active */
     body.touch-driving-active .ai-assistant-trigger
     {
-        bottom: 165px !important;
+        bottom: calc(300px + env(safe-area-inset-bottom, 0px)) !important;
     }
 
     body.touch-driving-active .music-player-hud
     {
-        bottom: 217px !important;
+        bottom: calc(354px + env(safe-area-inset-bottom, 0px)) !important;
     }
 }
 
@@ -2806,14 +2953,83 @@ html
         font-size: 10px !important;
     }
 
+    .start-intro-card
+    {
+        padding: 10px 12px !important;
+    }
+
+    .start-intro-summary
+    {
+        font-size: 10px !important;
+        line-height: 1.35 !important;
+    }
+
+    .tagline-phrase
+    {
+        font-size: 10.5px !important;
+        line-height: 1.35 !important;
+    }
+
     .start-intro-skills-grid
     {
-        grid-template-columns: 1fr !important;
-        row-gap: 4px !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        column-gap: 6px !important;
+        row-gap: 3px !important;
+        margin-top: 6px !important;
+        margin-bottom: 6px !important;
+    }
+
+    .skill-label
+    {
+        font-size: 9px !important;
+    }
+
+    .start-intro-closing
+    {
+        font-size: 9.5px !important;
+        line-height: 1.35 !important;
+    }
+
+    .mobile-start-btn
+    {
+        height: 40px !important;
+        min-height: 40px !important;
+        font-size: 11px !important;
     }
 
     .music-pill-track
     {
         max-width: 85px !important;
+    }
+}
+
+/* Landscape mode on mobile devices */
+@media (max-width: 900px) and (max-height: 500px)
+{
+    .start-left-column
+    {
+        top: calc(48px + env(safe-area-inset-top, 0px)) !important;
+        max-width: 320px !important;
+        max-height: calc(100vh - 56px) !important;
+    }
+
+    .start-character
+    {
+        height: 55vh !important;
+        max-height: 190px !important;
+        right: calc(8px + env(safe-area-inset-right, 0px)) !important;
+        bottom: calc(10px + env(safe-area-inset-bottom, 0px)) !important;
+    }
+
+    body.touch-driving-active .ai-assistant-trigger
+    {
+        bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+        right: calc(105px + env(safe-area-inset-right, 0px)) !important;
+    }
+
+    body.touch-driving-active .music-player-hud
+    {
+        bottom: calc(68px + env(safe-area-inset-bottom, 0px)) !important;
+        right: calc(105px + env(safe-area-inset-right, 0px)) !important;
     }
 }
