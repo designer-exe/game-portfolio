@@ -383,7 +383,7 @@ Category:
 Web Design • Community Retail
 
 Overview:
-A comprehensive web design and modern digital retail experience tailored for UAE-based grocery retail, focusing on modern grocery UX, intuitive navigation, and localized community culture.
+Designed a scalable digital experience that simplifies complex workflows and makes collaboration more intuitive. Focused on creating a clean, efficient interface with strong information hierarchy and seamless user journeys.
 
 My Role:
 Lead UI/UX Designer
@@ -392,7 +392,7 @@ Challenge:
 Designing for community, culture, and convenience — crafting seamless item discovery, localized bilingual navigation, and frictionless grocery checkout flows for diverse UAE shoppers.
 
 Approach:
-Structured information architecture for rapid item discovery, clear category hierarchies, quick-add baskets, and responsive design patterns optimized for quick ordering.
+Balanced business goals with user needs to deliver a product that feels simple, purposeful, and easy to use. Structured information architecture for rapid item discovery, clear category hierarchies, quick-add baskets, and responsive design patterns optimized for quick ordering.
 
 Tools:
 Figma, Photoshop, Illustrator

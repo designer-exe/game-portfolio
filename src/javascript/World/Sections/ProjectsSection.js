@@ -88,7 +88,11 @@ export default class ProjectsSection {
                     category: 'Web Design • Community Retail',
                     title: 'ADCOOP',
                     description: 'Designing for Communities, Culture & Convenience',
-                    details: 'Modern grocery UX, intuitive navigation & localized community interface'
+                    details: [
+                        'Designed a scalable digital experience that simplifies complex workflows and makes collaboration more intuitive.',
+                        'Focused on creating a clean, efficient interface with strong information hierarchy and seamless user journeys.',
+                        'Balanced business goals with user needs to deliver a product that feels simple, purposeful, and easy to use.'
+                    ]
                 },
                 imageSources:
                     [

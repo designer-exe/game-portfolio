@@ -29,7 +29,7 @@ export const PORTFOLIO_KNOWLEDGE = {
             title: 'ADCOOP',
             category: 'Web Design • Community Retail',
             description: 'Designing for Communities, Culture & Convenience. Modern grocery UX, intuitive navigation & localized community interface.',
-            details: 'Comprehensive web design and digital retail experience tailored for UAE-based grocery retail, focusing on intuitive multi-category browsing, quick-add baskets, and localized cultural elements.',
+            details: 'Designed a scalable digital experience that simplifies complex workflows and makes collaboration more intuitive. Focused on creating a clean, efficient interface with strong information hierarchy and seamless user journeys. Balanced business goals with user needs to deliver a product that feels simple, purposeful, and easy to use.',
             role: 'Lead UI/UX Designer',
             tools: ['Figma', 'Photoshop', 'Illustrator'],
             caseStudyUrl: 'https://www.behance.net/gallery/246296419/Adcoop-(Food-Retail)',

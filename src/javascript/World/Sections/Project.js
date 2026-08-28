@@ -169,16 +169,31 @@ export default class Project
             ctx.fillText(this.floorData.description || '', 120, 430)
 
             // Additional details / metrics if provided
+            let currentY = 510
             if(this.floorData.details)
             {
                 ctx.fillStyle = 'rgba(244, 232, 216, 0.75)'
-                ctx.font = '500 34px Manrope, sans-serif'
-                ctx.fillText(this.floorData.details, 120, 520)
+                const detailsLines = Array.isArray(this.floorData.details)
+                    ? this.floorData.details
+                    : typeof this.floorData.details === 'string'
+                        ? this.floorData.details.split('\n')
+                        : [this.floorData.details]
+
+                const isMulti = detailsLines.length > 1
+                ctx.font = isMulti ? '500 28px Manrope, sans-serif' : '500 34px Manrope, sans-serif'
+                const lineSpacing = isMulti ? 44 : 46
+
+                for(const line of detailsLines)
+                {
+                    const prefix = isMulti ? '• ' : ''
+                    ctx.fillText(prefix + line, 120, currentY)
+                    currentY += lineSpacing
+                }
             }
 
             // Interactive drive button pill
             const pillX = 120
-            const pillY = 590
+            const pillY = Math.max(590, currentY + 30)
             const pillWidth = 580
             const pillHeight = 88
             const pillCenterX = pillX + pillWidth * 0.5
