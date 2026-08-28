@@ -1,4 +1,4 @@
-﻿import { CONTACT_CONFIG } from '../Config/contact.js'
+import { CONTACT_CONFIG } from '../Config/contact.js'
 
 export default class ContactManager
 {
@@ -200,11 +200,12 @@ export default class ContactManager
 
         const formData = new FormData(this.form)
         const data = {
-            name: formData.get('name') || '',
-            email: formData.get('email') || '',
-            company: formData.get('company') || '',
-            message: formData.get('message') || '',
-            budget: formData.get('budget') || ''
+            name: (formData.get('name') || '').trim(),
+            email: (formData.get('email') || '').trim(),
+            company: (formData.get('company') || '').trim(),
+            message: (formData.get('message') || '').trim(),
+            budget: (formData.get('budget') || '').trim(),
+            _subject: `New Project Inquiry from ${(formData.get('name') || '').trim() || 'Portfolio Visitor'}`
         }
 
         if(!this.validate(data))
@@ -224,6 +225,11 @@ export default class ContactManager
         try
         {
             const endpoint = CONTACT_CONFIG.endpoint
+            if(!endpoint)
+            {
+                throw new Error('Formspree endpoint is not configured')
+            }
+
             const response = await fetch(endpoint, {
                 method: 'POST',
                 headers: {
@@ -245,7 +251,9 @@ export default class ContactManager
             }
             else
             {
-                throw new Error('Submission endpoint returned an error')
+                const result = await response.json().catch(() => null)
+                const errorMsg = result?.errors?.map(e => e.message).join(', ') || result?.error || 'Submission endpoint returned an error'
+                throw new Error(errorMsg)
             }
         }
         catch(err)
@@ -254,7 +262,7 @@ export default class ContactManager
             if(this.statusDiv)
             {
                 this.statusDiv.className = 'contact-status is-error'
-                this.statusDiv.innerHTML = `Could not submit automatically. Please reach out directly to <a href="mailto:${CONTACT_CONFIG.recipientEmail}?subject=Project%20Inquiry%20from%20${encodeURIComponent(data.name)}" style="color:#F4E8D8;text-decoration:underline;">${CONTACT_CONFIG.recipientEmail}</a>.`
+                this.statusDiv.innerHTML = `Could not submit automatically. Please reach out directly to <a href="mailto:${CONTACT_CONFIG.recipientEmail}?subject=Project%20Inquiry%20from%20${encodeURIComponent(data.name || 'Portfolio Visitor')}" style="color:#F4E8D8;text-decoration:underline;">${CONTACT_CONFIG.recipientEmail}</a>.`
             }
         }
         finally
