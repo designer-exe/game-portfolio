@@ -121,7 +121,11 @@ export default class ProjectsSection {
                     category: 'Game Design • Interactive Learning',
                     title: 'KALAM GAME',
                     description: 'Playful Arabic Learning Through Meaning & Emotion',
-                    details: 'Playful learning mechanics, tactile UI feedback & emotional engagement'
+                    details: [
+                        'Designed a thoughtful digital experience focused on making learning and content discovery more engaging and accessible.',
+                        'Simplified complex information through clear navigation, structured content, and intuitive interactions.',
+                        'Created a modern experience that connects users with knowledge while keeping the interface effortless to explore.'
+                    ]
                 },
                 imageSources:
                     [
@@ -150,7 +154,11 @@ export default class ProjectsSection {
                     category: 'Web Design • Infrastructure & Enterprise',
                     title: 'SERH GROUP',
                     description: 'Designing for Industry, Infrastructure & Innovation',
-                    details: 'Enterprise brand authority, scalable architecture & industrial aesthetics'
+                    details: [
+                        "Designed and developed a modern website experience that brings the brand's identity and digital presence together.",
+                        'Focused on strong visual storytelling, intuitive navigation, and a refined interaction system across the experience.',
+                        'Built a responsive, engaging interface that feels consistent, premium, and purposeful across devices.'
+                    ]
                 },
                 imageSources:
                     [

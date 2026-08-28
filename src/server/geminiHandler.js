@@ -417,7 +417,7 @@ Category:
 Game Design • Interactive Learning
 
 Overview:
-An educational mobile game experience designed to teach Arabic through playful mechanics, tactile reward loops, character progression, and emotional micro-interactions.
+Designed a thoughtful digital experience focused on making learning and content discovery more engaging and accessible. Simplified complex information through clear navigation, structured content, and intuitive interactions.
 
 My Role:
 Game & UI/UX Designer
@@ -426,7 +426,7 @@ Challenge:
 Transforming language acquisition into an intrinsically rewarding game — keeping learners emotionally engaged through intuitive touch mechanics and joyful feedback loops without cognitive overload.
 
 Approach:
-Integrated game UI mechanics with state-machine runtime animations, tactile UI feedback, and reward progression systems.
+Created a modern experience that connects users with knowledge while keeping the interface effortless to explore. Integrated game UI mechanics with state-machine runtime animations, tactile UI feedback, and reward progression systems.
 
 Tools:
 Figma, Illustrator, After Effects, Rive
@@ -451,7 +451,7 @@ Category:
 Web Design • Infrastructure & Enterprise
 
 Overview:
-Corporate enterprise website and digital presence for SERH Group, establishing brand authority in infrastructure, engineering, and logistics.
+Designed and developed a modern website experience that brings the brand's identity and digital presence together. Focused on strong visual storytelling, intuitive navigation, and a refined interaction system across the experience.
 
 My Role:
 Lead Web & Brand Designer
@@ -460,7 +460,7 @@ Challenge:
 Establishing corporate authority and industrial scale while keeping complex engineering services digestible, modern, and navigable.
 
 Approach:
-Bold dark-themed industrial aesthetics, modern typography, structured layout grids, and scalable component architecture.
+Built a responsive, engaging interface that feels consistent, premium, and purposeful across devices with bold dark-themed industrial aesthetics, modern typography, and structured layout grids.
 
 Tools:
 Figma, Photoshop
